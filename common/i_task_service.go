@@ -18,8 +18,10 @@ type ITaskService interface {
 	// Delete removes a task by ID. Returns an error if the task is not found.
 	Delete(id uuid.UUID) error
 
-	// GetAll returns a list of pointers to all tasks.
-	GetAll() []*models.Task
+	// GetAll retrieves all tasks from the MongoDB collection.
+	//
+	// Returns a slice of pointers to `models.Task` and an error if there is a connection or query issue with database.
+	GetAll() ([]*models.Task, error)
 
 	// GetSingle returns a task by ID. Returns an error if the task is not found.
 	GetSingle(id uuid.UUID) (*models.Task, error)
