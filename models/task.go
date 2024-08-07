@@ -25,6 +25,39 @@ type Task struct {
 	status      Status
 }
 
+// TaskBSON represents the BSON format of a Task for MongoDB operations.
+type TaskBSON struct {
+	ID          uuid.UUID `bson:"_id"`
+	Title       string    `bson:"title"`
+	Description string    `bson:"description"`
+	DueDate     time.Time `bson:"dueDate"`
+	Status      Status    `bson:"status"`
+	UpdatedAt   time.Time `bson:"updatedAt"`
+}
+
+// ToBSON converts a Task to a TaskBSON.
+func (t *Task) ToBSON() *TaskBSON {
+	return &TaskBSON{
+		ID:          t.ID(),
+		Title:       t.Title(),
+		Description: t.Description(),
+		DueDate:     t.DueDate(),
+		Status:      t.Status(),
+		UpdatedAt:   time.Now(), // Update timestamp on modification
+	}
+}
+
+// FromBSON converts a TaskBSON to a Task.
+func FromBSON(bson *TaskBSON) *Task {
+	return &Task{
+		id:          bson.ID,
+		title:       bson.Title,
+		description: bson.Description,
+		dueDate:     bson.DueDate,
+		status:      bson.Status,
+	}
+}
+
 // TaskConfig represents the configuration for creating or updating a Task.
 type TaskConfig struct {
 	Title       string
