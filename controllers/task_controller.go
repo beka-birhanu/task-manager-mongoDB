@@ -106,7 +106,12 @@ func (c *TaskController) deleteTask(ctx *gin.Context) {
 }
 
 func (c *TaskController) getAllTasks(ctx *gin.Context) {
-	tasks := c.taskService.GetAll()
+	tasks, err := c.taskService.GetAll()
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
 	var response []dto.TaskResponse
 	for _, task := range tasks {
 		response = append(response, dto.TaskResponse{
@@ -147,4 +152,3 @@ func (c *TaskController) getTask(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, response)
 }
-
